@@ -1,0 +1,30 @@
+name: Daily remote jobs email
+
+on:
+  schedule:
+    - cron: "0 7 * * *"   # 07:00 UTC = 08:00 in Lagos. Change the hour to suit you.
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install mail library
+        run: npm install nodemailer@6 --no-save
+
+      - name: Fetch jobs and send email
+        run: node scripts/daily-email.js
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          # Optional settings:
+          # WORLDWIDE_ONLY: "true"
+          # EXCLUDE_WORDS: "intern, manager"
+          # HOURS: "26"
