@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0E7C66">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Remote Jobs">
+<title>Remote dev jobs, last 7 days</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧭%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F4F1; --card:#FFFFFF; --ink:#10231F; --muted:#5B6B66; --line:#D9E0DB;
+  --accent:#0E7C66; --accent-ink:#FFFFFF; --new:#C2410C; --new-ink:#FFFFFF; --chip:#E4EBE6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0C1513; --card:#142320; --ink:#E6EFEA; --muted:#93A59E; --line:#233631; --accent:#3CCBA8; --accent-ink:#06211B; --new:#FB923C; --new-ink:#261003; --chip:#1B2E29;}
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%}
+main{max-width:720px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:clamp(1.9rem,7vw,2.6rem);line-height:1.05;margin:8px 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0 0 18px;max-width:46ch}
+button,select{font:inherit}
+button{cursor:pointer}
+.go{width:100%;padding:16px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:1.1rem}
+.go:disabled{opacity:.6}
+.go:focus-visible,.chip:focus-visible,.mini:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.status{margin:14px 0 4px;font-size:.9rem;color:var(--muted)}
+.status b{color:var(--ink)}
+.src{display:inline-block;margin:2px 6px 2px 0;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:.8rem}
+.src.bad{background:transparent;border:1px dashed var(--new);color:var(--new)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 8px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);padding:8px 12px;border-radius:999px;font-size:.9rem}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs .chip{padding:7px 11px;font-size:.85rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}
+input[type=search],input[type=text],select{padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+input[type=search],input[type=text]{flex:1;min-width:0}
+label.chk{display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--muted)}
+ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+li.job{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+li.job a.t{color:var(--ink);font-weight:600;font-size:1.05rem;text-decoration:none;display:block}
+li.job a.t:hover{text-decoration:underline}
+.badge{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:6px;background:var(--new);color:var(--new-ink);font-size:.72rem;font-weight:800;vertical-align:2px}
+.meta{color:var(--muted);font-size:.88rem;margin-top:4px}
+.tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.78rem;padding:2px 8px;border-radius:6px;background:var(--chip)}
+.age{font-weight:600}
+.age.fresh{color:var(--new)}
+.acts{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.mini{border:1px solid var(--line);background:transparent;color:var(--ink);padding:6px 11px;border-radius:8px;font-size:.82rem}
+.mini:hover{border-color:var(--accent)}
+.empty{padding:28px 8px;color:var(--muted);text-align:center}
+details{margin-top:28px;border-top:1px solid var(--line);padding-top:14px;font-size:.9rem;color:var(--muted)}
+summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details p{margin:10px 0 6px}
+footer{margin-top:18px;font-size:.8rem;color:var(--muted)}
+footer a{color:inherit}
+@media (prefers-reduced-motion:no-preference){button{transition:transform .1s}.go:active{transform:scale(.98)}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Remote dev jobs, last 7 days</h1>
+  <p class="sub">Software developer, frontend, backend and full stack roles from free job boards, worldwide.</p>
+
+  <button class="go" id="go" type="button">Search jobs</button>
+  <div class="status" id="status" role="status" aria-live="polite">Tap Search to load the latest listings.</div>
+
+  <div class="filters tabs" id="tabs" role="group" aria-label="View"></div>
+  <div class="row"><input type="search" id="q" placeholder="Filter by keyword, company or country" aria-label="Filter results"></div>
+
+  <div id="filters" hidden>
+    <div class="filters" id="roleChips" role="group" aria-label="Filter by role"></div>
+    <div class="row">
+      <select id="win" aria-label="Posted within">
+        <option value="1">Last 24 hours</option>
+        <option value="3">Last 3 days</option>
+        <option value="7">Last 7 days</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="ww"> Worldwide / anywhere only</label>
+    </div>
+  </div>
+
+  <ul id="list" aria-label="Job results"></ul>
+
+  <details>
+    <summary>Settings</summary>
+    <p>Hide words: listings whose title or company contains any of these are left out of the Open tab. Separate with commas, for example <code>intern, manager, unpaid</code>.</p>
+    <div class="row"><input type="text" id="exclude" placeholder="intern, manager, unpaid" aria-label="Hide words"></div>
+    <label class="chk"><input type="checkbox" id="auto"> Search automatically when the app opens</label>
+    <p>If a source shows as blocked, that site doesn't allow requests from browsers. Paste the address of a CORS proxy you control (for example a free Cloudflare Worker that takes the target in <code>?url=</code>) and it will be used for every source.</p>
+    <div class="row"><input type="text" id="proxy" placeholder="https://your-worker.workers.dev/?url=" aria-label="Proxy address"></div>
+  </details>
+
+  <footer>
+    Sources: <a href="https://remotive.com" rel="noopener">Remotive</a>, <a href="https://www.arbeitnow.com" rel="noopener">Arbeitnow</a>, <a href="https://jobicy.com" rel="noopener">Jobicy</a>, <a href="https://remoteok.com" rel="noopener">Remote OK</a>. Listings link back to the original boards. Saved, applied and hidden jobs are kept on this device only.
+  </footer>
+</main>
+
+<script>
+(function(){
+  var ROLES = [
+    {id:"software", label:"Software developer", re:/software\s*(developer|engineer)|\bdeveloper\b|\bprogrammer\b|\bsde\b|\bswe\b/i},
+    {id:"frontend", label:"Frontend engineer",  re:/front[\s-]?end|ui\s*(engineer|developer)|\breact\b|\bvue\b|\bangular\b/i},
+    {id:"backend",  label:"Backend engineer",   re:/back[\s-]?end|server[\s-]?side|\bapi\s*(engineer|developer)|\bnode(\.js)?\b|\bgolang\b|\bpython\b|\bjava\b|\bruby\b|\bphp\b|\.net\b/i},
+    {id:"fullstack",label:"Full stack developer",re:/full[\s-]?stack/i}
+  ];
+  var VIEWS = [["open","Open"],["saved","Saved"],["applied","Applied"],["hidden","Hidden"]];
+  var DAY = 864e5;
+
+  var $ = function(id){return document.getElementById(id)};
+  var go=$("go"), statusEl=$("status"), listEl=$("list"), tabsEl=$("tabs"), filtersEl=$("filters"),
+      chipsEl=$("roleChips"), q=$("q"), ww=$("ww"), winEl=$("win"),
+      proxyEl=$("proxy"), exEl=$("exclude"), autoEl=$("auto");
+
+  function load(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+  function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+  var prefs = load("rj2:prefs",{});
+  prefs.proxy = prefs.proxy||""; prefs.exclude = prefs.exclude||""; prefs.auto = !!prefs.auto;
+  prefs.win = prefs.win||7; prefs.ww = !!prefs.ww; prefs.roles = prefs.roles||{};
+  ROLES.forEach(function(r){ if(prefs.roles[r.id]===undefined) prefs.roles[r.id]=true });
+  function savePrefs(){save("rj2:prefs",prefs)}
+
+  var marks = load("rj2:marks",{});   // key -> {s:"saved"|"applied"|"hidden", at, job}
+  var seen  = load("rj2:seen",{});    // key -> first time this device saw it
+  (function(){
+    var cut=Date.now()-30*DAY, ch=false;
+    Object.keys(marks).forEach(function(k){ if(marks[k].s==="hidden" && marks[k].at<cut){delete marks[k];ch=true} });
+    if(ch) save("rj2:marks",marks);
+  })();
+
+  var jobs=[], jobsByKey={}, view="open";
+
+  proxyEl.value=prefs.proxy; exEl.value=prefs.exclude; autoEl.checked=prefs.auto;
+  winEl.value=String(prefs.win); ww.checked=prefs.ww;
+
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function safeUrl(u){return /^https?:\/\//i.test(u||"") ? u : "#"}
+
+  function parseDate(v){
+    if(v==null||v==="")return null;
+    if(typeof v==="number"){return new Date(v<1e12 ? v*1000 : v)}
+    var s=String(v).trim();
+    if(/^\d{9,13}$/.test(s)){var n=+s;return new Date(n<1e12?n*1000:n)}
+    s=s.replace(" ","T");
+    if(!/[zZ]|[+-]\d\d:?\d\d$/.test(s))s+="Z";
+    var d=new Date(s);
+    return isNaN(d)?null:d;
+  }
+
+  function wrap(url){
+    var p=(prefs.proxy||"").trim();
+    return p ? p+encodeURIComponent(url) : url;
+  }
+  function getJSON(url){
+    var ctl=new AbortController();
+    var t=setTimeout(function(){ctl.abort()},15000);
+    return fetch(wrap(url),{signal:ctl.signal}).then(function(r){
+      clearTimeout(t);
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      return r.json();
+    });
+  }
+
+  var SOURCES = [
+    {name:"Remotive", run:function(){
+      return getJSON("https://remotive.com/api/remote-jobs?category=software-dev&limit=300").then(function(d){
+        return (d.jobs||[]).map(function(j){return {
+          title:j.title, company:j.company_name, url:j.url, date:parseDate(j.publication_date),
+          location:j.candidate_required_location||"", tags:j.tags||[], type:j.job_type||"", salary:j.salary||"", source:"Remotive"}});
+      });
+    }},
+    {name:"Arbeitnow", run:function(){
+      return getJSON("https://www.arbeitnow.com/api/job-board-api").then(function(d){
+        return (d.data||[]).filter(function(j){return j.remote}).map(function(j){return {
+          title:j.title, company:j.company_name, url:j.url, date:parseDate(j.created_at),
+          location:j.location||"", tags:j.tags||[], type:(j.job_types||[]).join(", "), salary:"", source:"Arbeitnow"}});
+      });
+    }},
+    {name:"Jobicy", run:function(){
+      return getJSON("https://jobicy.com/api/v2/remote-jobs?count=100&industry=dev").then(function(d){
+        return (d.jobs||[]).map(function(j){return {
+          title:j.jobTitle, company:j.companyName, url:j.url, date:parseDate(j.pubDate),
+          location:Array.isArray(j.jobGeo)?j.jobGeo.join(", "):(j.jobGeo||""), tags:[], type:Array.isArray(j.jobType)?j.jobType.join(", "):(j.jobType||""), salary:"", source:"Jobicy"}});
+      });
+    }},
+    {name:"Remote OK", run:function(){
+      return getJSON("https://remoteok.com/api").then(function(d){
+        return (Array.isArray(d)?d:[]).filter(function(j){return j&&j.position}).map(function(j){return {
+          title:j.position, company:j.company, url:j.url||j.apply_url, date:parseDate(j.date||j.epoch),
+          location:j.location||"", tags:j.tags||[], type:"", salary:(j.salary_min?("$"+j.salary_min+(j.salary_max?" - $"+j.salary_max:"")):""), source:"Remote OK"}});
+      });
+    }}
+  ];
+
+  function rolesFor(job){
+    var hay=job.title+" "+(job.tags||[]).join(" ");
+    var out=[];
+    ROLES.forEach(function(r){ if(r.re.test(job.title) || (r.id!=="software" && r.re.test(hay))) out.push(r.id) });
+    return out;
+  }
+  function isWorldwide(loc){
+    if(!loc) return true;
+    return /worldwide|anywhere|global|world\b|any\s*location|remote$/i.test(loc.trim());
+  }
+  function ageText(d){
+    var h=(Date.now()-d.getTime())/36e5;
+    if(h<1)return "just now";
+    if(h<24)return Math.floor(h)+"h ago";
+    var days=Math.floor(h/24);
+    return days+(days===1?" day ago":" days ago");
+  }
+  function jobKey(j){return (j.company+"|"+j.title).toLowerCase().replace(/[^a-z0-9|]/g,"")}
+  function dedupe(arr){
+    var s={}, out=[];
+    arr.forEach(function(j){ if(s[j.key])return; s[j.key]=1; out.push(j) });
+    return out;
+  }
+  function snap(j){return {title:j.title,company:j.company,url:j.url,date:j.date.toISOString(),location:j.location,tags:(j.tags||[]).slice(0,6),type:j.type,salary:j.salary,source:j.source}}
+  function hydrate(s){var o=Object.assign({},s);o.date=new Date(s.date);return o}
+  function indexJobs(){jobsByKey={};jobs.forEach(function(j){jobsByKey[j.key]=j})}
+
+  /* ---------- lists ---------- */
+  function excludeWords(){
+    return prefs.exclude.split(",").map(function(s){return s.trim().toLowerCase()}).filter(Boolean);
+  }
+  function inWindow(j){return j.date.getTime() >= Date.now()-prefs.win*DAY}
+  function baseOpen(){return jobs.filter(function(j){return inWindow(j) && !marks[j.key]}).length}
+
+  function openList(){
+    var term=q.value.trim().toLowerCase(), ex=excludeWords();
+    return jobs.filter(function(j){
+      if(marks[j.key])return false;
+      if(!inWindow(j))return false;
+      if(!j.roles.some(function(r){return prefs.roles[r]}))return false;
+      if(prefs.ww && !isWorldwide(j.location))return false;
+      var head=(j.title+" "+j.company).toLowerCase();
+      if(ex.some(function(w){return head.indexOf(w)>-1}))return false;
+      if(term){
+        var hay=(j.title+" "+j.company+" "+j.location+" "+(j.tags||[]).join(" ")).toLowerCase();
+        if(hay.indexOf(term)<0)return false;
+      }
+      return true;
+    }).map(function(j){return {j:j,key:j.key,at:0}});
+  }
+  function markList(state){
+    var term=q.value.trim().toLowerCase();
+    return Object.keys(marks).filter(function(k){return marks[k].s===state}).map(function(k){
+      return {j:hydrate(marks[k].job), key:k, at:marks[k].at};
+    }).filter(function(it){
+      if(!term)return true;
+      var hay=(it.j.title+" "+it.j.company+" "+it.j.location).toLowerCase();
+      return hay.indexOf(term)>-1;
+    }).sort(function(a,b){return b.at-a.at});
+  }
+
+  /* ---------- rendering ---------- */
+  function btn(act,label,key){return '<button type="button" class="mini" data-act="'+act+'" data-key="'+esc(key)+'">'+label+'</button>'}
+  function actions(v,key){
+    if(v==="open")    return btn("saved","Save",key)+btn("applied","Mark applied",key)+btn("hidden","Hide",key);
+    if(v==="saved")   return btn("applied","Mark applied",key)+btn("clear","Unsave",key);
+    if(v==="applied") return btn("clear","Undo",key);
+    return btn("clear","Restore",key);
+  }
+  function card(j,key,v,at){
+    var fresh=(Date.now()-j.date.getTime())<DAY;
+    var isNew=v==="open" && seen[key] && (Date.now()-seen[key])<DAY;
+    var tags=(j.tags||[]).slice(0,5).map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join("");
+    var loc=j.location?esc(j.location):"Location not listed";
+    var marked = at ? ' · '+({saved:"Saved",applied:"Applied",hidden:"Hidden"}[v])+' '+ageText(new Date(at)) : "";
+    return '<li class="job">'+
+      '<a class="t" href="'+esc(safeUrl(j.url))+'" target="_blank" rel="noopener noreferrer">'+(isNew?'<span class="badge">New</span>':'')+esc(j.title)+'</a>'+
+      '<div class="meta">'+esc(j.company||"Company not listed")+' · '+loc+'</div>'+
+      '<div class="meta"><span class="age'+(fresh?' fresh':'')+'">'+ageText(j.date)+'</span> · '+esc(j.source)+
+        (j.type?' · '+esc(j.type):'')+(j.salary?' · '+esc(j.salary):'')+esc(marked)+'</div>'+
+      (tags?'<div class="tags">'+tags+'</div>':'')+
+      '<div class="acts">'+actions(v,key)+'</div>'+
+    '</li>';
+  }
+
+  function renderTabs(){
+    var c={saved:0,applied:0,hidden:0,open:baseOpen()};
+    Object.keys(marks).forEach(function(k){c[marks[k].s]++});
+    tabsEl.innerHTML="";
+    VIEWS.forEach(function(v){
+      var b=document.createElement("button");
+      b.type="button"; b.className="chip";
+      b.setAttribute("aria-pressed", view===v[0]?"true":"false");
+      b.textContent=v[1]+" ("+c[v[0]]+")";
+      b.addEventListener("click",function(){view=v[0];render()});
+      tabsEl.appendChild(b);
+    });
+  }
+  function renderChips(){
+    chipsEl.innerHTML="";
+    ROLES.forEach(function(r){
+      var n=jobs.filter(function(j){return inWindow(j) && !marks[j.key] && j.roles.indexOf(r.id)>-1}).length;
+      var b=document.createElement("button");
+      b.type="button"; b.className="chip";
+      b.setAttribute("aria-pressed", prefs.roles[r.id]?"true":"false");
+      b.textContent=r.label+" ("+n+")";
+      b.addEventListener("click",function(){prefs.roles[r.id]=!prefs.roles[r.id];savePrefs();render()});
+      chipsEl.appendChild(b);
+    });
+  }
+  function emptyMsg(){
+    if(view==="open") return jobs.length ? "No listings match these filters. Turn on more roles, widen the time window or clear the keyword." : "No results yet. Tap Search jobs.";
+    if(view==="saved") return "Nothing saved yet. Tap Save on a listing to keep it here.";
+    if(view==="applied") return "No applications marked yet. Tap Mark applied on a listing to track it here.";
+    return "Nothing hidden.";
+  }
+  function render(){
+    renderTabs();
+    var showFilters = view==="open" && jobs.length>0;
+    filtersEl.hidden=!showFilters;
+    if(showFilters) renderChips();
+    var items = view==="open" ? openList() : markList(view);
+    if(!items.length){ listEl.innerHTML='<li class="empty">'+emptyMsg()+'</li>'; return }
+    listEl.innerHTML=items.map(function(it){return card(it.j,it.key,view,it.at)}).join("");
+  }
+
+  /* ---------- actions ---------- */
+  listEl.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-act]");
+    if(!b)return;
+    var act=b.getAttribute("data-act"), key=b.getAttribute("data-key");
+    if(act==="clear"){ delete marks[key]; }
+    else{
+      var j=jobsByKey[key] || (marks[key] && hydrate(marks[key].job));
+      if(!j)return;
+      marks[key]={s:act, at:Date.now(), job:snap(j)};
+    }
+    save("rj2:marks",marks);
+    render();
+  });
+
+  q.addEventListener("input",render);
+  ww.addEventListener("change",function(){prefs.ww=ww.checked;savePrefs();render()});
+  winEl.addEventListener("change",function(){prefs.win=+winEl.value;savePrefs();render()});
+  proxyEl.addEventListener("change",function(){prefs.proxy=proxyEl.value.trim();savePrefs()});
+  exEl.addEventListener("input",function(){prefs.exclude=exEl.value;savePrefs();render()});
+  autoEl.addEventListener("change",function(){prefs.auto=autoEl.checked;savePrefs()});
+
+  /* ---------- search ---------- */
+  function markSeen(){
+    var first=!Object.keys(seen).length, now=Date.now(), cut=now-21*DAY;
+    jobs.forEach(function(j){ if(!seen[j.key]) seen[j.key]= first ? now-2*DAY : now });
+    Object.keys(seen).forEach(function(k){ if(seen[k]<cut) delete seen[k] });
+    save("rj2:seen",seen);
+  }
+
+  function search(){
+    go.disabled=true; go.textContent="Searching…";
+    statusEl.textContent="Checking "+SOURCES.length+" job boards…";
+    Promise.all(SOURCES.map(function(s){
+      return s.run().then(function(r){return {name:s.name,ok:true,jobs:r}})
+        .catch(function(){return {name:s.name,ok:false}});
+    })).then(function(results){
+      var chips=results.map(function(r){
+        return '<span class="src'+(r.ok?'':' bad')+'">'+esc(r.name)+(r.ok?' ✓ '+r.jobs.length:' blocked or down')+'</span>';
+      }).join("");
+      if(!results.some(function(r){return r.ok})){
+        statusEl.innerHTML='Every source failed, so the list was not changed. Check your connection or add a proxy in Settings.<br>'+chips;
+        return;
+      }
+      var cutoff=Date.now()-7*DAY, all=[];
+      results.forEach(function(r){ if(r.ok) all=all.concat(r.jobs) });
+      all=all.filter(function(j){return j.title && j.date && j.date.getTime()>=cutoff});
+      all.forEach(function(j){j.roles=rolesFor(j); j.key=jobKey(j)});
+      all=all.filter(function(j){return j.roles.length});
+      jobs=dedupe(all).sort(function(a,b){return b.date-a.date});
+      indexJobs(); markSeen();
+      save("rj2:cache",{at:Date.now(),jobs:jobs.map(function(j){return Object.assign({},j,{date:j.date.toISOString(),tags:(j.tags||[]).slice(0,8)})})});
+      statusEl.innerHTML='<b>'+jobs.length+' listings</b> from the last 7 days, newest first.<br>'+chips+
+        (results.some(function(r){return !r.ok})?'<br>Failed sources can be fixed with a proxy in Settings below.':'');
+      render();
+    }).finally(function(){
+      go.disabled=false; go.textContent="Search again";
+    });
+  }
+  go.addEventListener("click", search);
+
+  /* ---------- start ---------- */
+  var cache=load("rj2:cache",null);
+  if(cache && cache.jobs){
+    jobs=cache.jobs.map(function(j){j.date=new Date(j.date);return j}).filter(function(j){return !isNaN(j.date)});
+    indexJobs();
+    statusEl.textContent="Showing results from "+ageText(new Date(cache.at))+". Tap Search for the latest.";
+    go.textContent="Search again";
+  }
+  render();
+  if(prefs.auto) search();
+})();
+</script>
+</body>
+</html>
